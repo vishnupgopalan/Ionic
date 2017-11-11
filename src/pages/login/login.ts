@@ -1,24 +1,49 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
+import { HomePage } from '../home/home';
+import {AuthServiceProvider} from '../../providers/auth-service/auth-service';
 
-/**
- * Generated class for the LoginPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-@IonicPage()
+
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
+  selector: 'page-home',
+  templateUrl: 'login.html'
 })
-export class LoginPage {
+export class Login {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  ResponseData : any;
+  userData={"username":"","password":""}
+  // var userId = data.userId || null,
+  // entityId = data.entityId,
+  // active = data.active,
+  // firstName = data.firstName,
+  // lastName = data.lastName,
+  // credentials = data.credentials || '',
+  // title = data.title || '',
+  // specialty = data.specialty || undefined,
+  // emailAddress = data.emailAddress || '',
+  // roleId = data.roleId,
+  // firstTime = data.firstTime,
+  // lastLoginDt = data.lastLoginDt,
+  // auth = btoa(userName + ":" + password),
+  // functionList = data.functionList || null,
+  // systemParameters = data.systemParameter || null,
+  // consent = data.consent || [],
+  // authToken = data.authToken;
+
+  constructor(public navCtrl: NavController,public authServiceProvider:AuthServiceProvider) {
+
   }
+  login() {
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
+    this.authServiceProvider.postData(this.userData,'login').then(
+      (result)=>{this.ResponseData=result; localStorage.setItem('authData',JSON.stringify(this.ResponseData))
+      this.navCtrl.push(HomePage);
+    },err=>{
+      console.log('invalid Credential');
+    }
+  );
+
+    
+    
   }
-
 }
